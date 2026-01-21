@@ -10,7 +10,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, name: string) => void;
+  login: (email: string, name: string, isAdmin?: boolean) => void;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -25,12 +25,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (savedUser) setUser(JSON.parse(savedUser));
   }, []);
 
-  const login = (email: string, name: string) => {
+  const login = (email: string, name: string, isAdmin: boolean = false) => {
     const newUser = { 
       name, 
       email, 
-      isAdmin: true, // Qualquer login agora entra como administrador
-      history: [
+      isAdmin,
+      history: isAdmin ? [] : [
         { id: '10293', date: '12/02/2024', total: 1890, status: 'Entregue' },
         { id: '10455', date: '28/02/2024', total: 3400, status: 'Processando' }
       ] 

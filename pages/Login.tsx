@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, User, ArrowRight, ChevronLeft } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, ChevronLeft, ShieldCheck, UserCircle } from 'lucide-react';
 
 const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,14 +13,25 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const handleQuickLogin = (role: 'admin' | 'client') => {
+    if (role === 'admin') {
+      login('admin@1111joias.com.br', 'Administrador Master', true);
+      navigate('/admin');
+    } else {
+      login('cliente@email.com', 'Cliente VIP', false);
+      navigate('/perfil');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, isLogin ? 'Cliente VIP' : name);
+    // Por padrão, o formulário manual loga como cliente
+    login(email, isLogin ? 'Cliente VIP' : name, false);
     navigate('/perfil');
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-6 py-12">
+    <div className="min-h-[80vh] flex items-center justify-center px-6 py-12 bg-neutral-50/30">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,11 +44,38 @@ const Login: React.FC = () => {
 
         <div className="text-center mb-10">
           <h1 className="text-3xl font-serif text-brand-graphite mb-2 uppercase tracking-wider">
-            {isLogin ? 'Bem-vindo de volta' : 'Criar sua conta'}
+            {isLogin ? 'Identifique-se' : 'Criar sua conta'}
           </h1>
           <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-[0.2em]">
-            {isLogin ? 'Acesse seu histórico de joias' : 'Faça parte da nossa história'}
+            {isLogin ? 'Escolha como deseja acessar a plataforma' : 'Faça parte da nossa história'}
           </p>
+        </div>
+
+        {/* Botões de Acesso Rápido - Conforme solicitado */}
+        <div className="grid grid-cols-2 gap-4 mb-10">
+          <button 
+            onClick={() => handleQuickLogin('client')}
+            className="flex flex-col items-center gap-3 p-4 rounded-2xl border-2 border-neutral-50 hover:border-brand-gold/30 hover:bg-brand-gold/5 transition-all group"
+          >
+            <UserCircle className="w-6 h-6 text-neutral-400 group-hover:text-brand-gold" />
+            <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Acesso Cliente</span>
+          </button>
+          <button 
+            onClick={() => handleQuickLogin('admin')}
+            className="flex flex-col items-center gap-3 p-4 rounded-2xl border-2 border-neutral-50 hover:border-brand-gold/30 hover:bg-brand-gold/5 transition-all group"
+          >
+            <ShieldCheck className="w-6 h-6 text-neutral-400 group-hover:text-brand-gold" />
+            <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">Acesso Admin</span>
+          </button>
+        </div>
+
+        <div className="relative mb-10">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-neutral-100"></div>
+          </div>
+          <div className="relative flex justify-center text-[8px] uppercase font-bold tracking-[0.4em] text-neutral-300">
+            <span className="bg-white px-4">Ou use seu e-mail</span>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -91,12 +129,6 @@ const Login: React.FC = () => {
               className="w-full pl-12 pr-4 py-4 rounded-2xl bg-neutral-50 border-2 border-transparent focus:border-brand-gold outline-none text-sm transition-all"
             />
           </div>
-
-          {isLogin && (
-            <div className="text-right">
-              <button type="button" className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest hover:text-brand-gold">Esqueci minha senha</button>
-            </div>
-          )}
 
           <button 
             type="submit"

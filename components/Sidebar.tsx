@@ -14,7 +14,9 @@ import {
   Gem,
   Sparkles,
   PlusCircle,
-  Layers
+  Layers,
+  ShieldAlert,
+  LayoutDashboard
 } from 'lucide-react';
 import { useUI } from '../context/UIContext';
 import { useAuth } from '../context/AuthContext';
@@ -25,7 +27,7 @@ const Sidebar: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Agora utiliza a propriedade isAdmin definida no login
+  // Verifica se o usuário tem permissão de administrador
   const isAdmin = user?.isAdmin;
 
   const closeAndNavigate = (path: string) => {
@@ -64,8 +66,27 @@ const Sidebar: React.FC = () => {
 
             {/* Links de Navegação */}
             <div className="flex-1 overflow-y-auto no-scrollbar py-6">
+              
+              {/* Seção Admin de Destaque */}
+              {isAdmin && (
+                <div className="px-6 mb-8">
+                  <p className="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
+                    <ShieldAlert className="w-3 h-3" /> Gestão Administrativa
+                  </p>
+                  <div className="space-y-1">
+                    <button 
+                      onClick={() => closeAndNavigate('/admin')}
+                      className="w-full flex items-center gap-4 py-3 text-brand-graphite hover:text-brand-gold transition-colors group px-3 bg-neutral-50 rounded-xl"
+                    >
+                      <LayoutDashboard className="w-4 h-4 text-brand-gold" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Painel de Controle</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="px-6 mb-8">
-                <p className="text-[10px] font-bold text-neutral-300 uppercase tracking-[0.3em] mb-4">Navegação</p>
+                <p className="text-[10px] font-bold text-neutral-300 uppercase tracking-[0.3em] mb-4">Loja</p>
                 <div className="space-y-1">
                   <button 
                     onClick={() => closeAndNavigate('/')}
@@ -103,11 +124,11 @@ const Sidebar: React.FC = () => {
                 </div>
               </div>
 
-              {/* Seção Admin Condicional */}
+              {/* Seção Admin Detalhada Condicional */}
               {isAdmin && (
-                <div className="px-6 pt-6 border-t border-neutral-100 bg-neutral-50/50 pb-6">
-                  <p className="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
-                    <Settings className="w-3 h-3" /> Área Administrativa
+                <div className="px-6 pt-6 border-t border-neutral-100 bg-neutral-50/50 pb-6 mt-4">
+                  <p className="text-[10px] font-bold text-brand-graphite/40 uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
+                    Ações de Inventário
                   </p>
                   <div className="space-y-2">
                     <button 
@@ -116,19 +137,23 @@ const Sidebar: React.FC = () => {
                     >
                       <Layers className="w-4 h-4 text-brand-gold" />
                       <div className="text-left">
-                        <p className="text-[10px] font-bold uppercase tracking-widest">Gestão de Catálogo</p>
-                        <p className="text-[8px] uppercase tracking-tighter opacity-60">Visualizar Joias Criadas</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest">Ver Estoque</p>
+                        <p className="text-[8px] uppercase tracking-tighter opacity-60">Peças Cadastradas</p>
                       </div>
                     </button>
 
                     <button 
-                      onClick={() => closeAndNavigate('/admin')}
+                      onClick={() => {
+                        setIsSidebarOpen(false);
+                        navigate('/admin');
+                        // No admin, o modal de adicionar já pode ser aberto via estado local
+                      }}
                       className="w-full flex items-center gap-4 py-3 text-brand-graphite hover:text-brand-gold transition-colors group px-2 rounded-lg hover:bg-white"
                     >
                       <PlusCircle className="w-4 h-4 text-brand-gold" />
                       <div className="text-left">
-                        <p className="text-[10px] font-bold uppercase tracking-widest">Cadastro de Itens</p>
-                        <p className="text-[8px] uppercase tracking-tighter opacity-60">Adicionar Novos Itens</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest">Cadastrar Joia</p>
+                        <p className="text-[8px] uppercase tracking-tighter opacity-60">Adicionar novo item</p>
                       </div>
                     </button>
                   </div>
