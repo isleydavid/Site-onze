@@ -104,8 +104,8 @@ const SplashScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
             </div>
             
             <motion.div
-              initial={{ opacity: 0, tracking: '1em' }}
-              animate={{ opacity: 0.6, tracking: '0.5em' }}
+              initial={{ opacity: 0, letterSpacing: '1em' }}
+              animate={{ opacity: 0.6, letterSpacing: '0.5em' }}
               transition={{ delay: 2.6, duration: 1 }}
               className="text-brand-graphite font-sans text-[10px] mt-2 uppercase font-bold text-center"
             >

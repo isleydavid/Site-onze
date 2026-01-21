@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { Ring, Heart, Watch, Gem, ShoppingBag } from 'lucide-react';
+import { Heart, Watch, Gem, ShoppingBag } from 'lucide-react';
 import { Product, Category } from './types';
 
 export const CATEGORIES: Category[] = [
@@ -30,7 +29,6 @@ export const MOCK_PRODUCTS: Product[] = [
     shape: 'Arredondada',
     rating: 4.9,
     badge: '10% OFF',
-    // Added stock property to fix missing property error
     stock: 12
   },
   {
@@ -49,7 +47,6 @@ export const MOCK_PRODUCTS: Product[] = [
     shape: 'Quadrada',
     rating: 4.8,
     badge: 'LANÇAMENTO',
-    // Added stock property to fix missing property error
     stock: 8
   },
   {
@@ -67,7 +64,6 @@ export const MOCK_PRODUCTS: Product[] = [
     shape: 'Anatômica',
     rating: 5.0,
     badge: 'MAIS VENDIDO',
-    // Added stock property to fix missing property error
     stock: 15
   }
 ];
